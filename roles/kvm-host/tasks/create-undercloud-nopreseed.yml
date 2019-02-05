@@ -1,0 +1,11 @@
+---
+   - name: Copy qcow2 files
+     copy: remote_src=True src=/home/images/undercloud-matrix.qcow2 dest=/home/images/undercloud.qcow2
+   - name: create undercloud vm
+     command: >
+       virt-install --ram 16384 --vcpus 4 --os-variant rhel7 \
+       --disk path=/var/lib/libvirt/images/undercloud.qcow2,device=disk,bus=virtio,format=qcow2 \
+       --import --noautoconsole --vnc \
+       --network network:net-provisioning \
+       --network network:default \
+       --name undercloud

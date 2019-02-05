@@ -1,0 +1,17 @@
+---
+
+
+  - name: Move images folder
+    command: mv /var/lib/libvirt/images  /home/images
+  - name: create  symlink
+    file: path=/var/lib/libvirt/images src=/home/images state=link force=yes
+  - name: copy rhel7 image
+    copy: src={{ playbook_dir }}/roles/kvm-host/files/{{item}} dest=/var/lib/libvirt/images/{{item}}
+    with_items:
+      - rhel7-guest-official.qcow2
+    notify:
+      - libvirtd-restart
+  # - name: download centos
+  #   get_url: url=http://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2 dest=/var/lib/libvirt/images/CentOS-7-x86_64.qcow2
+  # - name: download vyos
+  #   get_url: url=http://packages.vyos.net/iso/release/1.1.7/vyos-1.1.7-amd64-signed.ova dest=/var/lib/libvirt/images/vyos.ova

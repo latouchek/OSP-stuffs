@@ -1,0 +1,81 @@
+#cloud-config
+cloud_init_modules:
+  - migrator
+  - cc_disk_setup
+  - bootcmd
+  - write-files
+  - growpart
+  - resizefs
+  - set_hostname
+  - update_hostname
+  - update_etc_hosts
+  - rsyslog
+  - users-groups
+  - ssh
+cloud_config_modules:
+  - mounts
+  - locale
+  - set-passwords
+  - yum-add-repo
+  - timezone
+  - disable-ec2-metadata
+  - runcmd
+  - package-update-upgrade-install
+cloud_final_modules:
+  - scripts-per-once
+  - scripts-per-boot
+  - scripts-per-instance
+  - scripts-user
+  - ssh-authkey-fingerprints
+  - keys-to-console
+  - final-message
+hostname: {{undercloud_hostname}}
+fqdn: {{undercloud_fqdn}}
+manage_etc_hosts: true
+debug: true
+output: { all: "| tee -a /var/log/cloud-init-output.log" }
+package_upgrade: true
+users:
+  - default
+  - name: stack
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+    groups: wheel,adm
+    ssh_pwauth: True
+    ssh_authorized_keys:
+      - {{IDRSAPUB}}
+      - ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIBuaErYJkQTbdE1NZovWf5hPanNR9liE9jeEf7gPw52kgStxy/ewX5JuFYSPQZN137G1HmIhk+FCa1XWfgL8GeTOtkHq/sIpYJChsK6QwxVd2/dQQLTrwmUgNLyM4brWQ7i0WhGeCDVIGCkvdkBOcPNaxJBb7vyt03ZemjnZhLXRQ== rsa-key-20050908
+  - name: root
+    ssh_authorized_keys:
+      - {{IDRSAPUB}}
+      - ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIBuaErYJkQTbdE1NZovWf5hPanNR9liE9jeEf7gPw52kgStxy/ewX5JuFYSPQZN137G1HmIhk+FCa1XWfgL8GeTOtkHq/sIpYJChsK6QwxVd2/dQQLTrwmUgNLyM4brWQ7i0WhGeCDVIGCkvdkBOcPNaxJBb7vyt03ZemjnZhLXRQ== rsa-key-20050908
+ssh_pwauth: True
+disable_root: false
+chpasswd:
+  list: |
+    root:toor
+    stack:stack
+  expire: false
+write_files:
+  - path: /etc/sysconfig/network-scripts/ifcfg-{{local_interface}}
+    content: |
+      DEVICE={{local_interface}}
+      BOOTPROTO="dhcp"
+      ONBOOT="no"
+      TYPE="Ethernet"
+      USERCTL="yes"
+      PEERDNS="no"
+      IPV6INIT="no"
+runcmd:
+  - yum remove -y cloud-init 
+packages:
+  - wget
+  - yum-utils
+  - python-tripleoclient
+  - git
+  - tmux
+  - vim
+  - libguestfs-tools-c
+  - openstack-utils
+  - python-virtualbmc
+  - httpd
+  - ceph-ansible

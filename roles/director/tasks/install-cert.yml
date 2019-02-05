@@ -1,0 +1,4 @@
+  - name: copy cert
+    copy: src={{ playbook_dir }}/roles/director/files/ca.crt.pem dest=/etc/pki/ca-trust/source/anchors/ca.crt.pem owner=root group=root mode=755
+    notify:
+     - update-ca-trust

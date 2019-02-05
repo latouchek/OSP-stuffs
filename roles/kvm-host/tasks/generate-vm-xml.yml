@@ -1,0 +1,4 @@
+---
+   - name: create xml for vm
+     template: src={{ playbook_dir }}/roles/kvm-host/templates/undercloud.j2.xml dest={{ playbook_dir }}/roles/kvm-host/templates/undercloud.xml  mode=755
+     delegate_to: localhost

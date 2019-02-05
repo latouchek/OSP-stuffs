@@ -1,0 +1,5 @@
+---
+  - name: install undercloud as stack user
+    become: yes
+    become_user: stack
+    command: openstack undercloud install

@@ -1,0 +1,75 @@
+---
+  - name: install packages for RedHat or CentOS
+    yum: name={{item}} state=latest
+    with_items:
+      - "@virtualization-hypervisor"
+      - "@virtualization-client"
+      - "@virtualization-platform"
+      - "@virtualization-tools"
+      - libguestfs-xfs
+      - libguestfs-tools
+      - libvirt
+      - libvirt-python
+      - python-lxml
+      - qemu-kvm
+      - virt-manager
+      - virt-install
+      - libselinux-python
+      - bash-completion
+      - git
+      - epel-release
+      - cloud-utils
+      - tmux
+      - https://www.rdoproject.org/repos/rdo-release.rpm
+    when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
+  - name: install OpenVswitch
+    yum: name=openvswitch state=latest
+    when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
+  - name: start openvswitch
+    service: name=openvswitch enabled=yes state=started
+    when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
+
+  - name: install packages for Fedora
+    dnf: name={{item}} state=latest
+    with_items:
+      - python-dnf
+      - libguestfs-xfs
+      - libguestfs-tools
+      - libvirt
+      - qemu-kvm
+      - virt-manager
+      - virt-install
+      - libguestfs-tools
+      - libselinux-python
+      - cloud-utils
+      - openvswitch
+      - git
+      - tmux
+    when: ansible_distribution == "Fedora"
+    # notify:
+    #   - Fopenvswitch
+  - name: start openvswitch
+    service: name=openvswitch enabled=yes state=started
+    when: ansible_distribution == "Fedora"
+  - name: start libvirtd
+    service: name=libvirtd enabled=yes state=started
+    when: ansible_distribution == "Fedora"
+
+
+  - name: install packages
+    apt: name={{item}} state=latest
+    with_items:
+      - libguestfs-xfs
+      - libguestfs-tools
+      - libvirt-bin
+      - qemu-kvm
+      - ubuntu-vm-builder
+      - virt-manager
+      - libguestfs-tools
+      - cloud-utils
+      - openvswitch-switch
+      - python-lxml
+      - virtinst
+      - bridge-utils
+      - aptitude
+    when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'

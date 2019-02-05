@@ -1,0 +1,39 @@
+resource_registry:
+  OS::TripleO::Network::External: ../network/external.yaml
+  OS::TripleO::Network::InternalApi: ../network/internal_api.yaml
+  OS::TripleO::Network::Storage: ../network/storage.yaml
+
+  # Port assignments for the controller role
+  OS::TripleO::Controller::Ports::ExternalPort: ../network/ports/external.yaml
+  OS::TripleO::Controller::Ports::InternalApiPort: ../network/ports/internal_api.yaml
+  OS::TripleO::Controller::Ports::StoragePort: ../network/ports/storage.yaml
+
+  # Port assignments for the compute role
+  OS::TripleO::Compute::Ports::InternalApiPort: ../network/ports/internal_api.yaml
+  OS::TripleO::Compute::Ports::StoragePort: ../network/ports/storage.yaml
+
+  # Port assignments for service virtual IPs for the controller role
+  OS::TripleO::Controller::Ports::RedisVipPort: ../network/ports/vip.yaml
+
+  OS::TripleO::Compute::Net::SoftwareConfig: ../network/config/bond-with-vlans/compute.yaml
+  OS::TripleO::Controller::Net::SoftwareConfig: ../network/config/bond-with-vlans/controller.yaml
+  OS::TripleO::CephStorage::Net::SoftwareConfig: ../network/config/bond-with-vlans/ceph-storage.yaml
+  # Port assignments for the ceph storage role
+  OS::TripleO::CephStorage::Ports::StoragePort: ../network/ports/storage.yaml
+  OS::TripleO::CephStorage::Ports::StorageMgmtPort: ../network/ports/storage_mgmt.yaml
+
+parameter_defaults:
+  ExternalNetCidr: {{ExternalNetCidr}}
+  ExternalAllocationPools: [{'start':'{{ExternalAllocationPoolsStart}}','end':'{{ExternalAllocationPoolsEnd}}'}]
+  ExternalNetworkVlanID: {{ExternalNetworkVlanID}}
+  ExternalInterfaceDefaultRoute: {{ExternalInterfaceDefaultRoute}}
+  InternalApiNetworkVlanID: {{InternalApiNetworkVlanID}}
+  InternalApiIpSubnet: {{InternalApiIpSubnet}}
+  StorageNetworkVlanID: {{StorageNetworkVlanID}}
+  StorageIpSubnet: {{StorageIpSubnet}}
+  TenantNetworkVlanID: {{TenantNetworkVlanID}}
+  TenantIpSubnet: {{TenantIpSubnet}}
+  StorageMgmtNetworkVlanID: {{StorageMgmtNetworkVlanID}}
+  StorageMgmtIpSubnet: {{StorageMgmtIpSubnet}}
+  NeutronExternalNetworkBridge: "''"
+  BondInterfaceOvsOptions: {{BondInterfaceOvsOptions}}

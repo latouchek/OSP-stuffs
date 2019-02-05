@@ -1,0 +1,18 @@
+---
+   - name: generate cloudinit
+     template: src={{ playbook_dir }}/roles/kvm-host/templates/cloudinit-template-undercloud.yaml dest=/tmp/cloud-init-{{undercloud_hostname}} owner=root group=root mode=755
+
+   - name: Create dirs for cloudinit data
+     file: path=/tmp/{{ item }} state=directory
+     with_items:
+       - cloudrive
+
+   - name: generate user_data
+     template: src=./roles/kvm-host/templates/cloudinit-template-undercloud.yaml dest=/tmp/cloudrive/user-data owner=root group=root mode=755
+
+   - name: generate metadata file
+     template: src=./roles/reposerver/templates/meta-data dest=/tmp/cloudrive/meta-data owner=root group=root mode=755
+
+   - name: generate cloud-drive for rhel and centos
+     command: >
+       genisoimage -o  /var/lib/libvirt/images/{{undercloud_hostname}}-drive.img -V cidata -r -J /tmp/cloudrive/meta-data /tmp/cloudrive/user-data

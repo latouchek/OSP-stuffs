@@ -1,0 +1,2 @@
+nova::api::vendordata_dynamic_connect_timeout: 30
+nova::api::vendordata_dynamic_read_timeout: 30

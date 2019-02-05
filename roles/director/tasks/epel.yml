@@ -1,0 +1,15 @@
+- name: Add EPEL
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    file: external_repos
+    baseurl: http://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+    gpgcheck: no
+- name: Add rpmforge
+  yum_repository:
+    name: rpmforge
+    description: RPMforge YUM repo
+    file: external_repos
+    baseurl: http://apt.sw.be/redhat/el7/en/$basearch/rpmforge
+    mirrorlist: http://mirrorlist.repoforge.org/el7/mirrors-rpmforge
+    enabled: yes

@@ -1,0 +1,11 @@
+
+- hosts: hosts
+  tasks:
+   - include: ./roles/kvm-host/tasks/prepare-undercloud-image.yml
+   # - include: ./roles/kvm-host/tasks/create-undercloud.yml
+   - include: ./roles/kvm-host/tasks/create-undercloud-xml.yml
+   - include: ./roles/kvm-host/tasks/pause.yml
+
+# - hosts: director
+#   roles:
+#      - director

@@ -1,0 +1,18 @@
+---
+
+  - name: download vyos
+    get_url: url=http://packages.vyos.net/iso/release/1.1.7/vyos-1.1.7-amd64-signed.ova dest=/var/lib/libvirt/images/vyos.ova
+  - name: Extract archive
+    unarchive: src=/var/lib/libvirt/images/vyos.ova dest=/var/lib/libvirt/images/ remote_src=yes 
+  - name: convert to cqow2
+    command: >
+      qemu-img convert -O qcow2 /var/lib/libvirt/images/VyOS-1.1.7-signed-disk1.vmdk  /var/lib/libvirt/images/vyos.qcow2
+  - name: deploy vyos vm
+    command: >
+      virt-install --ram 4096 --vcpus 2 --os-variant debiansqueeze \
+      --disk path=/var/lib/libvirt/images/vyos.qcow2,device=disk,bus=virtio,format=qcow2 \
+      --import --noautoconsole --vnc \
+      --network network:default \
+      --network network=ovs-trunk-network,portgroup=vlan-all \
+      --cpu host-passthrough \
+      --name overcloud-vyos

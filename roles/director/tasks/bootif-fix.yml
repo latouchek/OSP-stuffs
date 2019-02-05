@@ -1,0 +1,13 @@
+  - name: create script bootif-fix
+    copy: src=templates/bootif-fix dest=/usr/bin/bootif-fix owner=root group=root mode=755
+  - name: create service boot-fix.service
+    copy: src=templates/bootif-fix.service dest=/usr/lib/systemd/system/bootif-fix.service owner=root group=root mode=644
+    notify:
+     - start bootif-fix
+
+    # handlers:
+    #  - name: reload systemd
+    #    sudo: yes
+    #    command: systemctl daemon-reload
+    #  - name: start bootif-fix
+    #    service: name=bootif-fix enabled=yes state=started

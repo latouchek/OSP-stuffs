@@ -1,0 +1,44 @@
+#cloud-config
+hostname: ansible-installer
+fqdn: ansible-installer.lab.local
+manage_etc_hosts: true
+debug: true
+package_upgrade: true
+users:
+  - default
+  - name: stack
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+    groups: wheel,adm
+    ssh_pwauth: True
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCrtITXKDyt4IaVisPO4m/R3/Cc/2c4s2Ex8GbbhgnhKh7z0cWzYVhYZnomi2NfYu7VDElmQtq/K51//FYrDEXspoDS9sxx9ovshwVL46g4Y40/AxvrtduzhOQ1XXc2H24Jq31KR4qCKDjInQOzU0AaLmT4JghU80jaQXFJ0BLXxUiqw1Y/QABz91niu8+wZPk0JQmRWu/2ZFfnBC1cjr3u5CDzTviYZQAnxd+K7T4xnIFA3eHIMQ8NtwPDi5fj6/bOkkQlJL0zWodLMKS0ZlReInxii2gOI07Z1Yc1qxXeCvONcaPfL7t1YRX105QTCWz6xP3bDPLzZmH2RPbYf5Kf amotta@win98.local
+      - ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIBuaErYJkQTbdE1NZovWf5hPanNR9liE9jeEf7gPw52kgStxy/ewX5JuFYSPQZN137G1HmIhk+FCa1XWfgL8GeTOtkHq/sIpYJChsK6QwxVd2/dQQLTrwmUgNLyM4brWQ7i0WhGeCDVIGCkvdkBOcPNaxJBb7vyt03ZemjnZhLXRQ== rsa-key-20050908
+  - name: root
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCrtITXKDyt4IaVisPO4m/R3/Cc/2c4s2Ex8GbbhgnhKh7z0cWzYVhYZnomi2NfYu7VDElmQtq/K51//FYrDEXspoDS9sxx9ovshwVL46g4Y40/AxvrtduzhOQ1XXc2H24Jq31KR4qCKDjInQOzU0AaLmT4JghU80jaQXFJ0BLXxUiqw1Y/QABz91niu8+wZPk0JQmRWu/2ZFfnBC1cjr3u5CDzTviYZQAnxd+K7T4xnIFA3eHIMQ8NtwPDi5fj6/bOkkQlJL0zWodLMKS0ZlReInxii2gOI07Z1Yc1qxXeCvONcaPfL7t1YRX105QTCWz6xP3bDPLzZmH2RPbYf5Kf amotta@win98.local
+      - ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIBuaErYJkQTbdE1NZovWf5hPanNR9liE9jeEf7gPw52kgStxy/ewX5JuFYSPQZN137G1HmIhk+FCa1XWfgL8GeTOtkHq/sIpYJChsK6QwxVd2/dQQLTrwmUgNLyM4brWQ7i0WhGeCDVIGCkvdkBOcPNaxJBb7vyt03ZemjnZhLXRQ== rsa-key-20050908
+ssh_pwauth: True
+disable_root: false
+chpasswd:
+  list: |
+    root:toor
+    stack:stack
+  expire: false
+write_files:
+  - path: /etc/sysconfig/network-scripts/ifcfg-eth0
+    content: |
+      DEVICE=eth0
+      ONBOOT=yes
+      IPADDR=10.0.0.3
+      NETMASK=255.255.255.0
+      GATEWAY=10.0.0.1
+      NM_CONTROLLED=no
+      DNS1=8.8.8.8
+runcmd:
+  - sed -i 's/^#   StrictHostKeyChecking ask/StrictHostKeyChecking no/g' /etc/ssh/ssh_config
+  - echo "UserKnownHostsFile=/dev/null" | sudo tee -a /etc/ssh/ssh_config > /dev/null
+  - sed -i 's/#UseDNS yes/UseDNS no/g' /etc/ssh/sshd_config
+packages:
+  - git
+  - tmux
+  - wget

@@ -1,0 +1,19 @@
+---
+
+
+   - name: define virtenv vms
+     virt:
+         name: '{{item}}'
+         command: define
+         xml: "{{ lookup('file', '{{ playbook_dir }}/roles/kvm-host/files/{{item}}.xml') }}"
+         uri: 'qemu:///system'
+         with_items:
+           - overcloud-ceph01
+           - overcloud-ceph03
+           - overcloud-ctrl03
+           - overcloud-ceph02
+           - overcloud-compute02
+           - overcloud-ctrl01
+           - overcloud-ctrl02
+           - overcloud-compute01
+           - overcloud-networker

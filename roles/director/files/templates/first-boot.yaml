@@ -1,0 +1,117 @@
+heat_template_version: 2014-10-16
+
+description:
+
+parameters:
+
+resources:
+  userdata:
+    type: OS::Heat::MultipartMime
+    properties:
+      parts:
+      # - config: {get_resource: root_password}
+      - config: {get_resource: wipe_ceph_drives}
+      - config: {get_resource: cloudinit}
+  cloudinit:
+    type: OS::Heat::CloudConfig
+    properties:
+      cloud_config:
+        package_upgrade: true
+        write_files:
+        - path: /etc/yum.repos.d/OSP.repo
+          content: |
+            [extras]
+            name = rhel-7-server-extras-rpms
+            baseurl = http://192.168.122.4/OSP/rhel-7-server-extras-rpms
+            gpgcheck = 0
+            enabled = 1
+            [OSP]
+            name = rhel-7-server-openstack-12-rpms
+            baseurl = http://192.168.122.4/OSP/rhel-7-server-openstack-12-rpms
+            gpgcheck = 0
+            enabled = 1
+            [tools]
+            name = rhel-7-server-openstack-12-devtools-rpms
+            baseurl = http://192.168.122.4/OSP/rhel-7-server-openstack-12-devtools-rpms
+            gpgcheck = 0
+            enabled = 1
+            [common]
+            name = rhel-7-server-rh-common-rpms
+            baseurl = http://192.168.122.4/OSP/rhel-7-server-rh-common-rpms
+            gpgcheck = 0
+            enabled = 1
+            [server]
+            name = rhel-7-server-rpms
+            baseurl = http://192.168.122.4/OSP/rhel-7-server-rpms
+            gpgcheck = 0
+            enabled = 1
+            [ha]
+            name = rhel-ha-for-rhel-7-server-rpms
+            baseurl = http://192.168.122.4/OSP/rhel-ha-for-rhel-7-server-rpms
+            gpgcheck = 0
+            enabled = 1
+        users:
+         - admin
+         - name: stack
+           sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+           groups: wheel,adm
+           ssh_pwauth: True
+           ssh_authorized_keys:
+             - ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIBuaErYJkQTbdE1NZovWf5hPanNR9liE9jeEf7gPw52kgStxy/ewX5JuFYSPQZN137G1HmIhk+FCa1XWfgL8GeTOtkHq/sIpYJChsK6QwxVd2/dQQLTrwmUgNLyM4brWQ7i0WhGeCDVIGCkvdkBOcPNaxJBb7vyt03ZemjnZhLXRQ== rsa-key-20050908
+         - name: root
+           ssh_authorized_keys:
+             - ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIBuaErYJkQTbdE1NZovWf5hPanNR9liE9jeEf7gPw52kgStxy/ewX5JuFYSPQZN137G1HmIhk+FCa1XWfgL8GeTOtkHq/sIpYJChsK6QwxVd2/dQQLTrwmUgNLyM4brWQ7i0WhGeCDVIGCkvdkBOcPNaxJBb7vyt03ZemjnZhLXRQ== rsa-key-20050908
+        ssh_pwauth: True
+        disable_root: false
+        chpasswd:
+          list: |
+            root:toor
+            stack:stack
+          expire: false
+        packages:
+           - tmux
+           - git
+           - wget
+  root_password:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      config: |
+        #!/bin/bash
+        sed -i 's/.*ssh-rsa/ssh-rsa/' /root/.ssh/authorized_keys
+        systemctl restart sshd
+
+  wipe_ceph_drives:
+    type: OS::Heat::SoftwareConfig
+    properties:
+      config: |
+        #!/bin/bash
+        if [[ `hostname` = *"compute"* ]] || [[ `hostname` = *"ceph"* ]] || [[ `hostname` = *"fatsocomputo"* ]]
+        then
+          echo "Number of disks detected: $(lsblk -no NAME,TYPE,MOUNTPOINT | grep "disk" | awk '{print $1}' | wc -l)"
+          for DEVICE in `lsblk -no NAME,TYPE,MOUNTPOINT | grep "disk" | awk '{print $1}'`
+          do
+            ROOTFOUND=0
+            echo "Checking /dev/$DEVICE..."
+            echo "Number of partitions on /dev/$DEVICE: $(expr $(lsblk -n /dev/$DEVICE | awk '{print $7}' | wc -l) - 1)"
+            for MOUNTS in `lsblk -n /dev/$DEVICE | awk '{print $7}'`
+            do
+              if [ "$MOUNTS" = "/" ]
+              then
+                ROOTFOUND=1
+              fi
+            done
+            if [ $ROOTFOUND = 0 ]
+            then
+              echo "Root not found in /dev/${DEVICE}"
+              echo "Wiping disk /dev/${DEVICE}"
+              sgdisk -Z /dev/${DEVICE}
+              sgdisk -g /dev/${DEVICE}
+            else
+              echo "Root found in /dev/${DEVICE}"
+            fi
+          done
+        fi
+
+outputs:
+  OS::stack_id:
+    value: {get_resource: userdata}

@@ -1,0 +1,35 @@
+$TTL 86400
+@ IN SOA {{item.name}}.lab.local. root.lab.local. (
+2017120100 ;Serial
+3600 ;Refresh
+1800 ;Retry
+604800 ;Expire
+43200 ;Minimum TTL
+)
+;Name Server Information
+@ IN NS {{item.name}}.lab.local.
+;IP address of Name Server
+{{item.name}} IN A 192.168.122.30
+
+
+;A - Record HostName To Ip Address
+reposerver IN A 192.168.122.4
+master01 IN A 192.168.122.31
+master02 IN A 192.168.122.32
+master03 IN A 192.168.122.33
+infranode01 IN A 192.168.122.34
+infranode02 IN A 192.168.122.35
+infranode03 IN A 192.168.122.36
+node01 IN A 192.168.122.37
+node02 IN A 192.168.122.38
+node03 IN A 192.168.122.39
+haproxylb IN A 192.168.122.40
+console   IN A 192.168.122.40
+console-int IN A 192.168.122.40
+ceph01 IN A 192.168.122.41
+ceph02 IN A 192.168.122.42
+ceph03 IN A 192.168.122.43
+*.apps  IN A 192.168.122.37
+*.apps  IN A 192.168.122.38
+*.apps  IN A 192.168.122.39
+*.apps  IN A 192.168.122.40

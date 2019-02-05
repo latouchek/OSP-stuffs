@@ -1,0 +1,7 @@
+parameter_defaults:
+  CephAnsibleDisksConfig:
+    osd_scenario: collocated
+    devices:
+      - /dev/vdb
+  CephAnsibleExtraConfig:
+    mon_use_fqdn: true

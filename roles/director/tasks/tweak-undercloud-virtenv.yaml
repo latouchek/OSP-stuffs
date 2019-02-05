@@ -1,0 +1,9 @@
+---
+  - name: modify nova.conf
+    ini_file: dest=/etc/nova/nova.conf section={{ item.section }}  option={{ item.option }} value={{ item.value }}
+    with_items:
+      - { section: 'DEFAULT', option: 'rpc_response_timeout', value: '600'}
+  - name: modify ironic.conf
+    ini_file: dest=/etc/ironic/ironic.conf section={{ item.section }}  option={{ item.option }} value={{ item.value }}
+    with_items:
+      - { section: 'DEFAULT', option: 'rpc_response_timeout', value: '600'}

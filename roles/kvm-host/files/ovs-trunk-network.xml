@@ -1,0 +1,23 @@
+<network>
+  <name>ovs-trunk-network</name>
+  <forward mode='bridge'/>
+  <bridge name='ovsbr0'/>
+  <virtualport type='openvswitch'/>
+  <portgroup name='vlan-native' default='yes'>
+     <tag id='1' nativeMode='untagged'/>
+ </portgroup>
+  <portgroup name='vlan-all'>
+    <vlan trunk='yes'>
+      <tag id='101'/>
+      <tag id='201'/>
+      <tag id='202'/>
+      <tag id='203'/>
+      <tag id='204'/>
+      <tag id='205'/>
+      <tag id='301'/>
+      <tag id='401'/>
+      <tag id='501'/>
+      <tag id='601'/>
+    </vlan>
+  </portgroup>
+</network>

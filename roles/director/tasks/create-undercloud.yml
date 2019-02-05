@@ -1,0 +1,35 @@
+---
+   - name: generate cloudinit
+     template: src={{ playbook_dir }}/roles/kvm-host/templates/cloudinit-template.yaml dest=/tmp/cloud-init-{{undercloud_hostname}} owner=root group=root mode=755
+     delegate_to: ovh
+
+   - name: generate cloud-drive
+     command: >
+      cloud-localds /var/lib/libvirt/images/{{undercloud_hostname}}-drive.img /tmp/cloud-init-{{undercloud_hostname}}
+     when: ansible_distribution == 'Fedora' or ansible_distribution == 'ansible'
+     delegate_to: ovh
+
+   - name: generate cloud-drive for rhel and centos
+     command: >
+      LIBGUESTFS_BACKEND=direct virt-make-fs --type=msdos --label=cidata /tmp/  /var/lib/libvirt/images/{{undercloud_hostname}}-drive.img
+     when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
+     delegate_to: ovh
+
+   - name: Copy preseeded qcow2 file and use it as a base for undercloud creation
+     copy: remote_src=True src=/home/images/{{undercloud_hostname}}-matrix.qcow2 dest=/home/images/{{undercloud_hostname}}.qcow2
+     delegate_to: ovh
+
+   - name: create {{undercloud_hostname}} vm
+     command: >
+       virt-install --ram 16384 --vcpus 12 --os-variant rhel7 \
+       --disk path=/var/lib/libvirt/images/{{undercloud_hostname}}.qcow2,device=disk,bus=virtio,format=qcow2 \
+       --disk path=/var/lib/libvirt/images/{{undercloud_hostname}}-drive.img,device=disk,bus=virtio,format=qcow2 \
+       --import --noautoconsole --vnc \
+       --network network:net-provisioning \
+       --network network:default \
+       --cpu host-passthrough \
+       --name {{undercloud_hostname}}
+     delegate_to: ovh
+  #  - name: Detach cloud-drive
+  #    command: >
+  #     virsh detach-disk --persistent {{undercloud_hostname}} /var/lib/libvirt/images/{{undercloud_hostname}}-drive.img

@@ -1,0 +1,29 @@
+---
+
+  - name: generate cloudinit
+    template: src=./templates/cloudinit-centos-template.yaml dest=/tmp/cloud-init-centos owner=root group=root mode=755
+  - name: generate cloud-drive
+    command: >
+     cloud-localds /var/lib/libvirt/images/centos-drive.img /tmp/cloud-init-centos
+
+  - name: modify cloud image
+    command: >
+     qemu-img create -f qcow2 /home/images/centos-matrix.qcow2 150G
+  - name: expand image
+    command: >
+     virt-resize --expand /dev/sda1 /home/images/CentOS-7-x86_64.qcow2 /home/images/centos-matrix.qcow2
+  # - name: create centos-matrix
+  #   command: >
+  #    qemu-img create -f qcow2 -b /home/images/centos-matrix.qcow2/home/images/centos-matrix.qcow2
+  - name: copy preseed-centos script on target
+    copy: src=./files/preseed-centos.sh dest=/home/images/preseed-centos.sh owner=root group=root mode=0755
+
+  - name: preseed-centos
+    command: >
+     virt-customize -a /home/images/centos-matrix.qcow2 --run /home/images/preseed-centos.sh
+  # - name: update
+  #   command: >
+  #    virt-customize -a /home/images/centos-matrix.qcow2 --update
+  # - name: set dhcp reservation for undercloud in default net-update
+  #   command: >
+  #    virsh net-update default add ip-dhcp-host '<host mac="52:54:00:d5:a4:07" ip="192.168.122.8"/>' --live --config --parent-index 0

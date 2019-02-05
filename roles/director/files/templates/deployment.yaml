@@ -1,0 +1,34 @@
+parameter_defaults:
+
+  # Debug: false
+
+  NtpServer: ntp.ovh.net
+
+  # ControllerHostnameFormat: 'controller-%index%'
+  # ComputeHostnameFormat: 'compute-%index%'
+  # CephStorageHostnameFormat: 'ceph-%index%'
+  # OsdComputeHostnameFormat: 'osd-compute-%index%'
+
+  OvercloudControllerProfile: control
+  OvercloudComputeProfile: compute
+#   OvercloudCephStorageProfile: ceph-storage
+# #  OvercloudOsdComputeProfile: osd-compute
+#
+  # OvercloudControllerFlavor: control
+  # OvercloudComputeFlavor: compute
+#   OvercloudCephStorageFlavor: ceph-storage
+# #  OvercloudOsdComputeFlavor: osd-compute
+#
+  ControllerCount: 3
+  ComputeCount: 3
+#   CephStorageCount: 0
+#   OsdComputeCount: 0
+
+  # ControllerSchedulerHints:
+  #   'capabilities:node': 'controller-%index%'
+  # NovaComputeSchedulerHints:
+  #   'capabilities:node': 'compute-%index%'
+  # CephStorageSchedulerHints:
+  #   'capabilities:node': 'ceph-storage-%index%'
+  # OsdComputeSchedulerHints:
+  #   'capabilities:node': 'osd-compute-%index%'

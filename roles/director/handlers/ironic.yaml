@@ -1,0 +1,4 @@
+---
+
+ - name: restart openstack-ironic-conductor
+   service: name=openstack-ironic-conductor state=restarted

@@ -1,0 +1,12 @@
+- name: "stop {{undercloud_hostname}}"
+  command: >
+    virsh  destroy {{undercloud_hostname}}
+  delegate_to: "anssi-kvm"
+- name: "snapshot {{undercloud_hostname}}"
+  command: >
+    virsh  snapshot-create-as --domain {{undercloud_hostname}} --name {{undercloud_hostname}}-before-install
+  delegate_to: 'anssi-kvm'
+- name: "start {{undercloud_hostname}}"
+  command: >
+    virsh  start {{undercloud_hostname}}
+  delegate_to: 'anssi-kvm'

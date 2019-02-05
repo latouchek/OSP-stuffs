@@ -1,0 +1,91 @@
+
+- hosts: hosts
+  tasks:
+  - name: create boot volume
+    command: >
+     qemu-img create -f qcow2 /var/lib/libvirt/images/{{ reposerver_hostname }}-matrix.qcow2 10G
+  - name: expand image
+    command: >
+     virt-resize --expand /dev/sda1 /var/lib/libvirt/images/rhel7-guest-official.qcow2 /var/lib/libvirt/images/{{ reposerver_hostname }}-matrix.qcow2
+  - name: Copy cloud.cfg
+    copy: src={{ playbook_dir }}/roles/kvm-host/files/cloud.cfg dest=/var/lib/libvirt/images/cloud.cfg
+  # - name: modify cloudinit conf on image
+  #   command:
+  #    virt-customize -a /var/lib/libvirt/images/{{ reposerver_hostname }}-matrix.qcow2 --copy-in /var/lib/libvirt/images/cloud.cfg:/etc/cloud/
+  - name: generate preseed file
+    template: src={{ playbook_dir }}/roles/reposerver/templates/preseed-reposerver.sh dest=/var/lib/libvirt/images/preseed-reposerver.sh owner=root group=root mode=0755
+
+  - name: preseed
+    command: >
+     virt-customize -a /var/lib/libvirt/images/{{ reposerver_hostname }}-matrix.qcow2 --run /var/lib/libvirt/images/preseed-reposerver.sh
+  - name: Copy preseeded qcow2 file and use it as a base for  creation
+    copy: remote_src=True src=/var/lib/libvirt/images/{{ reposerver_hostname }}-matrix.qcow2 dest=/var/lib/libvirt/images/{{ reposerver_hostname }}.qcow2
+
+  - name: create data disk
+    command: >
+     qemu-img create -f qcow2 /var/lib/libvirt/images/{{ reposerver_hostname }}-storagedisk-OSP.qcow2 50G
+
+
+  - name: Create dirs for cloudinit data
+    file: path=/tmp/{{ item }} state=directory
+    with_items:
+      - cloudrive
+  - name: generate user_data
+    template: src=./roles/reposerver/templates/cloudinit-reposerver.yaml dest=/tmp/cloudrive/user-data owner=root group=root mode=755
+  - name: generate metadata file
+    template: src=./roles/reposerver/templates/meta-data dest=/tmp/cloudrive/meta-data owner=root group=root mode=755
+  # - name: generate cloud-drive
+  #   command: >
+  #    cloud-localds /var/lib/libvirt/images/{{ reposerver_hostname }}-drive.img /tmp/cloud-init-{{ reposerver_hostname }}
+  - name: generate cloud-drive for rhel and centos
+    command: >
+      genisoimage -o  /var/lib/libvirt/images/{{reposerver_hostname}}-drive.iso -V cidata -r -J /tmp/cloudrive/meta-data /tmp/cloudrive/user-data
+
+  - name: create reposerver vm
+    command: >
+      virt-install --ram 16384 --vcpus 8 --os-variant rhel7 \
+      --disk path=/var/lib/libvirt/images/{{ reposerver_hostname }}.qcow2,device=disk,bus=virtio,format=qcow2 \
+      --disk path=/var/lib/libvirt/images/{{ reposerver_hostname }}-storagedisk-OSP.qcow2,device=disk,bus=virtio,format=qcow2 \
+      --disk path=/var/lib/libvirt/images/{{ reposerver_hostname }}-drive.iso,device=disk,bus=virtio,format=qcow2 \
+      --import --noautoconsole --vnc \
+      --network network:default \
+      --cpu host-passthrough \
+      --name {{ reposerver_hostname }}
+  - name: pause until ssh connection comes back
+    pause:
+      minutes: 1
+- hosts: reposerver
+  tasks:
+    - name: Check if cloud-init is done
+      wait_for:
+        path:  /var/log/cloud-init.log
+        search_regex: "finished at"
+    - name: copy cron script
+      template: src=./roles/reposerver/templates/repo-cron-11.sh dest=/opt/repo-cron.sh owner=root group=root mode=0755
+    - name: create symlink
+      file: dest=/var/www/html/OSP src=/OSPOCP state=link force=yes
+      notify:
+        - httpd
+    - name: disable selinux
+      selinux: state=disabled
+    - name: populate repos
+      script:
+        ./roles/reposerver/templates/repo-cron-11.sh
+    - name: create cron job to update repo-cron
+      cron:
+        name: yum autoupdate
+        weekday: 0-6
+        minute: 0
+        hour: 12
+        user: root
+        job: "/opt/repo-cron.sh"
+        cron_file: repo-update
+
+  handlers:
+    - name: httpd
+      service: name=httpd enabled=yes state=started
+- hosts: hosts
+  tasks:
+    - name: Detach cloud-drive
+      command: >
+        virsh detach-disk --persistent {{reposerver_hostname}} /var/lib/libvirt/images/{{reposerver_hostname}}-drive.iso

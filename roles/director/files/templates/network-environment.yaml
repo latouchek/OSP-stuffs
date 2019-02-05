@@ -1,0 +1,41 @@
+resource_registry:
+  OS::TripleO::Compute::Net::SoftwareConfig: /home/stack/templates/nic-configs/compute.yaml
+  OS::TripleO::Controller::Net::SoftwareConfig: /home/stack/templates/nic-configs/controller.yaml
+  OS::TripleO::CephStorage::Net::SoftwareConfig: /home/stack/templates/nic-configs/ceph-storage.yaml
+  OS::TripleO::FatsoComputo::Net::SoftwareConfig: /home/stack/templates/nic-configs/computehci.yaml
+
+
+
+parameter_defaults:
+  NeutronBridgeMappings: 'datacentre:br-ex,provider:br-provider'
+  NeutronFlatNetworks: 'datacentre'
+  NeutronEnableIsolatedMetadata: 'True'
+  # NeutronNetworkVLANRanges: "provider:150:153"
+  ControlPlaneSubnetCidr: '24'
+  ControlPlaneDefaultRoute: 192.0.2.2
+  EC2MetadataIp: 192.0.2.2
+  ExternalNetCidr: 10.0.0.0/24
+  ExternalAllocationPools: [{"start": "10.0.0.10", "end": "10.0.0.50"}]
+  ExternalInterfaceDefaultRoute: 10.0.0.1
+  NeutronExternalNetworkBridge: "''"
+  InternalApiNetCidr: 172.17.0.0/24
+  InternalApiAllocationPools: [{"start": "172.17.0.10", "end": "172.17.0.250"}]
+  InternalApiNetworkVlanID: 401
+  StorageNetCidr: 172.18.0.0/24
+  StorageAllocationPools: [{"start": "172.18.0.10", "end": "172.18.0.250"}]
+  StorageNetworkVlanID: 301
+  StorageMgmtNetCidr: 172.19.0.0/24
+  StorageMgmtAllocationPools: [{"start": "172.19.0.10", "end": "172.19.0.250"}]
+  StorageMgmtNetworkVlanID: 201
+  TenantNetCidr: 172.16.0.0/24
+  TenantAllocationPools: [{"start": "172.16.0.10", "end": "172.16.0.250"}]
+  TenantNetworkVlanID: 101
+  DnsServers: ["8.8.8.8", "8.8.4.4"]
+  ControllerHostnameFormat: 'lab-control0%index%'
+  ComputeHostnameFormat: 'lab-compute0%index%'
+  ComputeHCIHostnameFormat: 'lab-osdcompute0%index%'
+  CephStorageHostnameFormat: 'lab-ceph0%index%'
+  GenericHostnameFormat: 'lab-opstools%index%'
+  FatsoComputoHostnameFormat: 'lab-fatsocomputo0%index%'
+  # TimeZone: 'Europe/Paris'  ##set in cloudinit
+  CloudDomain: lab.local

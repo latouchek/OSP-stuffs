@@ -1,0 +1,4 @@
+<network>
+<name>net-internal</name>
+<ip address="172.17.0.1" netmask="255.255.255.0"/>
+</network>

@@ -1,0 +1,6 @@
+---
+
+  - name: post undercloud deploy commands
+    script: templates/postdeploy-undercloud.sh
+    become: true
+    become_user: stack

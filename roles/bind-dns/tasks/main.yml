@@ -1,0 +1,24 @@
+---
+- name: install bind
+  package: name={{ item }} state=present
+  with_items:
+    - bind
+    - bind-utils
+- name: create named.conf
+  template:
+    src: named.conf.j2
+    dest: /etc/named.conf
+    mode: '777'
+- name: create forward zone
+  template:
+    src: fwd.lab.local.db.j2
+    dest: /var/named/fwd.lab.local.db
+    mode: '777'
+  with_items: "{{bastion}}"
+
+- name: create reverse zone
+  template:
+    src: 122.168.192.db.j2
+    dest: /var/named/122.168.192.db
+    mode: '777'
+  with_items: "{{bastion}}"

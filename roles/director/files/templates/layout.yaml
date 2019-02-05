@@ -1,0 +1,87 @@
+resource_registry:
+
+  OS::TripleO::Controller::Ports::InternalApiPort: /usr/share/openstack-tripleo-heat-templates/network/ports/internal_api_from_pool.yaml
+  OS::TripleO::Controller::Ports::TenantPort: /usr/share/openstack-tripleo-heat-templates/network/ports/tenant_from_pool.yaml
+  OS::TripleO::Controller::Ports::StoragePort: /usr/share/openstack-tripleo-heat-templates/network/ports/storage_from_pool.yaml
+  OS::TripleO::Controller::Ports::StorageMgmtPort: /usr/share/openstack-tripleo-heat-templates/network/ports/storage_mgmt_from_pool.yaml
+
+  OS::TripleO::Compute::Ports::InternalApiPort: /usr/share/openstack-tripleo-heat-templates/network/ports/internal_api_from_pool.yaml
+  OS::TripleO::Compute::Ports::TenantPort: /usr/share/openstack-tripleo-heat-templates/network/ports/tenant_from_pool.yaml
+  OS::TripleO::Compute::Ports::StoragePort: /usr/share/openstack-tripleo-heat-templates/network/ports/storage_from_pool.yaml
+  OS::TripleO::Compute::Ports::StorageMgmtPort: /usr/share/openstack-tripleo-heat-templates/network/ports/storage_mgmt_from_pool.yaml
+
+
+# parameter_defaults:
+#   Debug: false
+#
+#   NtpServer: ntp.ovh.net
+#
+#   # ControllerHostnameFormat: 'controller-%index%'
+#   # ComputeHostnameFormat: 'compute-%index%'
+#   # CephStorageHostnameFormat: 'ceph-%index%'
+#   # OsdComputeHostnameFormat: 'osd-compute-%index%'
+#
+#  OvercloudControllerProfile: control
+#  OvercloudComputeProfile: compute
+#  OvercloudCephStorageProfile: ceph-storage
+#  # OvercloudOsdComputeProfile: osd-compute
+#
+#  OvercloudControllerFlavor: control
+#  OvercloudComputeFlavor: compute
+#  OvercloudCephStorageFlavor: ceph-storage
+#  # OvercloudOsdComputeFlavor: osd-compute
+#
+#   ControllerCount: 3
+#   ComputeCount: 3
+#   CephStorageCount: 0
+#   OsdComputeCount: 0
+#
+#   ControllerSchedulerHints:
+#     'capabilities:node': 'control'
+#   NovaComputeSchedulerHints:
+#     'capabilities:node': 'compute'
+#   CephStorageSchedulerHints:
+#     'capabilities:node': 'ceph-storage'
+#   # OsdComputeSchedulerHints:
+#   #   'capabilities:node': 'osd-compute'
+#
+#
+#   ControllerIPs:
+#     internal_api:
+#       - 172.17.0.200
+#       - 172.17.0.201
+#       - 172.17.0.202
+#     tenant:
+#       - 172.16.0.200
+#       - 172.16.0.201
+#       - 172.16.0.202
+#     storage:
+#       - 172.18.0.200
+#       - 172.18.0.201
+#       - 172.18.0.202
+#     storage_mgmt:
+#       - 172.19.0.200
+#       - 172.19.0.201
+#       - 172.19.0.202
+#
+#   OsdComputeIPs:
+#     internal_api:
+#       - 172.17.0.203
+#       - 172.17.0.204
+#       - 172.17.0.205
+#       #- 172.17.0.206
+#     tenant:
+#       - 172.16.0.203
+#       - 172.16.0.204
+#       - 172.16.0.205
+#       #- 172.16.0.206
+#     storage:
+#       - 172.18.0.203
+#       - 172.18.0.204
+#       - 172.18.0.205
+#       #- 172.18.0.206
+#     storage_mgmt:
+#       - 172.19.0.203
+#       - 172.19.0.204
+#       - 172.19.0.205
+#       #- 172.19.0.206

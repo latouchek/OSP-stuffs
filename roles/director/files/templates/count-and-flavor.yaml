@@ -1,0 +1,16 @@
+
+parameter_defaults:
+  OvercloudControllerFlavor: control
+  ControllerCount: 1
+  OvercloudNetworkerFlavor: networker
+  NetworkerCount: 0
+  OvercloudCephStorageFlavor: ceph-storage
+  CephStorageCount: 3
+  OvercloudGenericFlavor: baremetal
+  GenericCount: 0
+  OvercloudComputeFlavor: compute
+  ComputeCount: 1
+  OvercloudComputeHCIFlavor: osdcompute
+  ComputeHCICount: 0
+  OvercloudFatsoComputoFlavor: fatso-computo
+  FatsoComputoCount: 0

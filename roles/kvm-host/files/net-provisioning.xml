@@ -1,0 +1,5 @@
+<network>
+  <name>net-provisioning</name>
+  <ip address='192.0.2.1' netmask='255.255.255.0'>
+  </ip>
+</network>

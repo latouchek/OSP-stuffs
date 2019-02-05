@@ -1,0 +1,53 @@
+#cloud-config
+
+hostname: rhsec-director
+fqdn: rhsec-director.rhsec.redhat.com
+manage_etc_hosts: true
+debug: true
+output: { all: "| tee -a /var/log/cloud-init-output.log" }
+package_upgrade: true
+rh_subscription:
+    username:
+    password:
+    auto-attach: false
+    add-pool: [ '' ]
+    disable-repo: [ '*' ]
+    enable-repo: [ 'rhel-7-server-extras-rpms', 'rhel-7-server-rh-common-rpms', 'rhel-7-server-rpms', 'rhel-ha-for-rhel-7-server-rpms', 'rhel-7-server-openstack-13-rpms', 'rhel-7-server-openstack-13-devtools-rpms' ]
+users:
+  - default
+  - name: stack
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+    groups: wheel,adm
+    ssh_pwauth: True
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDEzU7Cer0A9BPODCrDfZDYKGUPmVfuEP5TeI7jzXWSxjnTYyv3G69mIr7rt1z4PlmBYJ20K9yqu+DauLBa5E4WN8SzBbavaxLfzRiChhVAUUtrL0KoSEt8kYl15vLBUTSgaRXWGM2uCBODa2xa6MY5GBfDICBaOXXpBDNZ9MEuBclqB0vboOM1KF9DVqYcWaluICLfKNeCMGoChYIS+GUbvcMZNyD8ZUKf2AE77PHBlrazW+H5e+kLQGr6EOkrP1WGRucK0x/IlAFsBtkwdR8k7cdssf+dUH7cLwmuXI11Q2mymQKlXtrsyzbgDVI8KLuapsiD74yBEmTuSYtC9Ait latouche@metal-machine-music
+      - ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBACn2xfgfgNCabNbQZqKqw2R0JB+PYYwc0L8aXgiO0toJgaTNSsKTtCHlsgJsxBb+C7SCOew9Yf1zH2Hs3+gnxWkkgB0MtGvovNgbATbyWfLANxL4HWugHR54gqJ5m2Kd78oTjErG8bPVero/u9d60Y2kZFK0Pmdu+4ZoFiTZNMjg+RvDQ== latouche@metal-robot-music
+  - name: root
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDEzU7Cer0A9BPODCrDfZDYKGUPmVfuEP5TeI7jzXWSxjnTYyv3G69mIr7rt1z4PlmBYJ20K9yqu+DauLBa5E4WN8SzBbavaxLfzRiChhVAUUtrL0KoSEt8kYl15vLBUTSgaRXWGM2uCBODa2xa6MY5GBfDICBaOXXpBDNZ9MEuBclqB0vboOM1KF9DVqYcWaluICLfKNeCMGoChYIS+GUbvcMZNyD8ZUKf2AE77PHBlrazW+H5e+kLQGr6EOkrP1WGRucK0x/IlAFsBtkwdR8k7cdssf+dUH7cLwmuXI11Q2mymQKlXtrsyzbgDVI8KLuapsiD74yBEmTuSYtC9Ait latouche@metal-machine-music
+      - ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIBuaErYJkQTbdE1NZovWf5hPanNR9liE9jeEf7gPw52kgStxy/ewX5JuFYSPQZN137G1HmIhk+FCa1XWfgL8GeTOtkHq/sIpYJChsK6QwxVd2/dQQLTrwmUgNLyM4brWQ7i0WhGeCDVIGCkvdkBOcPNaxJBb7vyt03ZemjnZhLXRQ== rsa-key-20050908
+ssh_pwauth: True
+disable_root: false
+chpasswd:
+  list: |
+    root:toor
+    stack:stack
+  expire: false
+growpart:
+  mode: auto
+  devices: ['/']
+
+runcmd:
+  #- yum remove -y cloud-init
+packages:
+  - wget
+  - yum-utils
+  - python-tripleoclient
+  - git
+  - tmux
+  - vim
+  - libguestfs-tools-c
+  - openstack-utils
+  - python-virtualbmc
+  - httpd
+  - ceph-ansible

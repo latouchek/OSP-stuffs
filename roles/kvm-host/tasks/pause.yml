@@ -1,0 +1,3 @@
+- name: pause until ssh connection comes back
+  pause:
+    minutes: 15

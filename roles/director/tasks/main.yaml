@@ -1,0 +1,17 @@
+- include_vars: ../../../group_vars/all.yml
+# - include: wait-cloudinit.yml
+# - include: remove-cloudinit.yml
+- include: create-dirs.yml
+- include: reboot-system.yaml
+# - include: bootif-fix.yml
+# - include: detach-cloud-drive.yml
+# - include: ../../kvm-host/tasks/pause.yml
+- include: copy-undercloud-conf.yml
+- include: undercloud-install.yml
+- include: install-images.yml
+# - include: tweak-undercloud-virtenv.yaml
+# - include: ironic-pxe.yml
+- include: post-install-commands.yml
+# - include: prepare-overcloud-commands.yml
+# - include: install-cert.yml
+- include: snapshot-director.yml

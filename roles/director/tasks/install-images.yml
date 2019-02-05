@@ -1,0 +1,14 @@
+---
+  
+  - name: install images packages
+    yum: name={{item}} state=latest update_cache=yes
+    with_items:
+      - rhosp-director-images-ipa
+      - rhosp-director-images
+  - name: decompress images
+    become: yes
+    become_user: stack
+    unarchive: src={{item}} dest=/home/stack/images/ copy=no
+    with_items:
+      - /usr/share/rhosp-director-images/ironic-python-agent.tar
+      - /usr/share/rhosp-director-images/overcloud-full.tar

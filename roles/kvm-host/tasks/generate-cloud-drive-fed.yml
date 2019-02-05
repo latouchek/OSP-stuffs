@@ -1,0 +1,7 @@
+---
+   - name: generate cloudinit
+     template: src={{ playbook_dir }}/roles/kvm-host/templates/cloudinit-template-undercloud.yaml dest=/tmp/cloud-init-{{undercloud_hostname}} owner=root group=root mode=755
+
+   - name: generate cloud-drive
+     command: >
+      cloud-localds /var/lib/libvirt/images/{{undercloud_hostname}}-drive.img /tmp/cloud-init-{{undercloud_hostname}}

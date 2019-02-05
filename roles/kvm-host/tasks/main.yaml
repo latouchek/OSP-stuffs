@@ -1,0 +1,8 @@
+- include_vars: ../../../group_vars/all.yml
+# - include: kvm-packages.yml
+# - include: move-images-folder.yml
+# - include: enable-nested-v.yml
+# - include: reboot-system.yml
+- include: net-create-loop.yml
+# - include: enable-remote-virsh.yml
+# - include: deploy-vyos.yml

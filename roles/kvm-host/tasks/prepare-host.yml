@@ -1,0 +1,5 @@
+---
+
+  - name: prepare host
+    command: >
+     dnf install -y libselinux-python python2-dnf

@@ -1,0 +1,4 @@
+---
+  - name: openvswitch Ubuntu
+    service: name=openvswitch-switch enabled=yes state=started
+    when: ansible_distribution == "Ubuntu"

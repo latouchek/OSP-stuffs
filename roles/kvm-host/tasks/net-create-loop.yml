@@ -1,0 +1,11 @@
+---
+  - name: create ovs bridge
+    openvswitch_bridge: bridge=ovsbr0 state=present
+  - name: create network loop
+    include: create-kvm-net-task.yml
+    with_items:
+      - net-external
+      # - net-provisioning
+      # - net-tenant
+      # - net-internal
+      - ovs-trunk-network

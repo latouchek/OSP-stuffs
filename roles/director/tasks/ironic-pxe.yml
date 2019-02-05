@@ -1,0 +1,16 @@
+---
+
+  - name: modify ironic.conf
+    ini_file: dest=/etc/ironic/ironic.conf owner=stack group=wheel mode=755 section={{ item.section }}  option={{ item.option }} value={{ item.value }}
+    register: pxedrivers
+    with_items:
+      - { section: 'DEFAULT', option: 'enabled_drivers', value: 'pxe_ipmitool,pxe_ssh,pxe_drac,fake_pxe'}
+  - name: restart openstack-ironic-conductor
+    service: name=openstack-ironic-conductor state=restarted
+    when: pxedrivers.changed
+  # handlers:
+  #   - name: reload systemd
+  #     sudo: yes
+  #     command: systemctl daemon-reload
+  #   - name: start bootif-fix
+  #     service: name=bootif-fix enabled=yes state=started

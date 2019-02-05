@@ -1,0 +1,24 @@
+---
+  - name: generate undercloud.conf
+    ini_file: dest=/home/stack/undercloud.conf owner=stack group=wheel mode=755 section={{ item.section }}  option={{ item.option }} value={{ item.value }} create=yes
+    with_items:
+      - { section: 'DEFAULT', option: 'image_path', value: '/home/stack/images'}
+      - { section: 'DEFAULT', option: 'local_ip', value: '{{local_ip}}'}
+      - { section: 'DEFAULT', option: 'undercloud_public_vip', value: '{{undercloud_public_vip}}'}
+      - { section: 'DEFAULT', option: 'undercloud_admin_vip', value: '{{undercloud_admin_vip}}'}
+      - { section: 'DEFAULT', option: 'local_interface', value: '{{local_interface}}'}
+      - { section: 'DEFAULT', option: 'masquerade_network', value: '{{masquerade_network}}'}
+      - { section: 'DEFAULT', option: 'dhcp_start', value: '{{dhcp_start}}'}
+      - { section: 'DEFAULT', option: 'dhcp_end', value: '{{dhcp_end}}'}
+      - { section: 'DEFAULT', option: 'network_cidr', value: '{{network_cidr}}'}
+      - { section: 'DEFAULT', option: 'network_gateway', value: '{{network_gateway}}'}
+      - { section: 'DEFAULT', option: 'inspection_interface', value: 'br-ctlplane'}
+      - { section: 'DEFAULT', option: 'discovery_iprange', value: '{{discovery_iprange}}'}
+      - { section: 'DEFAULT', option: 'undercloud_debug', value: 'true'}
+      # - { section: 'DEFAULT', option: 'enable_tempest', value: '{{enable_tempest}}'}
+      # - { section: 'DEFAULT', option: 'enable_tuskar', value: '{{enable_tuskar}}'}
+      - { section: 'DEFAULT', option: 'ipxe_deploy', value: '{{ipxe_deploy}}'}
+      - { section: 'DEFAULT', option: 'clean_nodes', value: '{{clean_nodes}}'}
+      - { section: 'DEFAULT', option: 'enable_ui', value: '{{enable_ui}}'}
+      - { section: 'DEFAULT', option: 'generate_service_certificate', value: '{{generate_service_certificate}}'}
+      - { section: 'auth', option: 'undercloud_admin_password', value: '{{undercloud_admin_password}}'}

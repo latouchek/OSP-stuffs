@@ -1,0 +1,11 @@
+- name: Create dirs for templates and images in stack home
+  file: path=/home/stack/{{ item }} state=directory owner=stack group=stack mode=755
+  with_items:
+    - images
+    - scripts
+    - templates
+# - name: Copy scripts
+#   copy:  src={{ playbook_dir }}/roles/director/files/scripts  dest=/home/stack/ owner=stack group=stack mode=755
+
+# - name: Copy templates
+#   copy:  src={{ playbook_dir }}/roles/director/files/templates  dest=/home/stack/ owner=stack group=stack mode=755

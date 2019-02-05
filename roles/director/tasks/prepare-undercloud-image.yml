@@ -1,0 +1,14 @@
+---
+
+  - name: modify cloud image
+    command: >
+     qemu-img create -f qcow2 /var/lib/libvirt/images/{{undercloud_hostname}}-matrix.qcow2 80G
+  - name: expand image
+    command: >
+     virt-resize --expand /dev/sda1 /var/lib/libvirt/images/rhel7-guest-official.qcow2 /var/lib/libvirt/images/{{undercloud_hostname}}-matrix.qcow2
+  - name: generate preseed-undercloud script 4
+    template: src={{ playbook_dir }}/roles/kvm-host/templates/preseed-undercloud.sh dest=/var/lib/libvirt/images/preseed-{{undercloud_hostname}}.sh
+
+  - name: preseed
+    command: >
+     virt-customize -a /var/lib/libvirt/images/{{undercloud_hostname}}-matrix.qcow2 --run /var/lib/libvirt/images/preseed-{{undercloud_hostname}}.sh

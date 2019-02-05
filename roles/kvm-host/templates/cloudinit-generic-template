@@ -1,0 +1,24 @@
+#cloud-config
+hostname: undercloud-8
+fqdn: undercloud-8.lab.local
+manage_etc_hosts: true
+debug: true
+package_upgrade: true
+users:
+  - default
+  - name: stack
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+    groups: wheel,adm
+    ssh_pwauth: True
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIBuaErYJkQTbdE1NZovWf5hPanNR9liE9jeEf7gPw52kgStxy/ewX5JuFYSPQZN137G1HmIhk+FCa1XWfgL8GeTOtkHq/sIpYJChsK6QwxVd2/dQQLTrwmUgNLyM4brWQ7i0WhGeCDVIGCkvdkBOcPNaxJBb7vyt03ZemjnZhLXRQ== rsa-key-20050908
+  - name: root
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAIBuaErYJkQTbdE1NZovWf5hPanNR9liE9jeEf7gPw52kgStxy/ewX5JuFYSPQZN137G1HmIhk+FCa1XWfgL8GeTOtkHq/sIpYJChsK6QwxVd2/dQQLTrwmUgNLyM4brWQ7i0WhGeCDVIGCkvdkBOcPNaxJBb7vyt03ZemjnZhLXRQ== rsa-key-20050908
+ssh_pwauth: True
+disable_root: false
+chpasswd:
+  list: |
+    root:toor
+    stack:stack
+  expire: false

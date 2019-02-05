@@ -1,0 +1,35 @@
+#cloud-config
+hostname: undercloud
+fqdn: undercloud.lab.local
+manage_etc_hosts: true
+debug: True
+users:
+  - default
+  - name: stack
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+    groups: wheel,adm
+    ssh_pwauth: True
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwy2vrriyfpHJDlyaMlgn0RkwQ7t6+0rjtbkbrpjTsBg9xm0y9xkYe7MityxMGptr840Mzf5TC6Jm7w5fslcMYzj1vmzM9h48F08tt9wEWCcfA9B6DT9ERHbDU+GXVSCnXLXpFNRck6CxwZgFVULjbb9WFX3A/2MJ6rs/eqQmuZo1D/gpYfzLv6+1U3SYLSfilu7v33i8fF3wByALkUvO6RgZD9tdlN4OUjSKk4uUPlunvSu9LZdjhhJEHUVUAY1h2dgYGASU3zQjgaoegZx4ev4cpY9yz/GyfaOdMjkuLPxwNL+S0B1M1yeCceYKDkKsl3DB5lAu5xSx32CrBQZT/ root@kvm-host-klatouch.lab.local
+ssh_pwauth: True
+disable_root: false
+chpasswd:
+  list: |
+    root:password
+    cloud-user:atomic
+    stack:stack
+  expire: false
+runcmd:
+- sleep 10
+- subscription-manager register --username=klatouch-tiger --password=Nitzerebb70%
+- subscription-manager attach --pool=8a85f9814fd23c0b014fd6c9fe851105
+- subscription-manager repos --disable=*
+- subscription-manager repos --enable=rhel-7-server-rpms --enable=rhel-7-server-optional-rpms --enable=rhel-7-server-extras-rpms --enable=rhel-7-server-openstack-7.0-rpms --enable=rhel-7-server-openstack-7.0-director-rpms
+- yum install yum-plugin-priorities wget -y
+- yum install yum-utils -y
+- for PKGNAME in rhel-7-server-openstack-7.0-rpms rhel-7-server-rpms rhel-7-server-optional-rpms rhel-7-server-extras-rpms rhel-7-server-openstack-7.0-director-rpms ; do yum-config-manager --enable ${PKGNAME} --setopt="${PKGNAME}.priority=1" ; done
+- yum update -y
+- yum install -y python-rdomanager-oscplugin git screen
+- yum install ansible --enablerepo=epel-testing -y
+- sed -i'.orig' -e's/without-password/yes/' /etc/ssh/sshd_config
+- systemctl restart sshd

@@ -1,0 +1,286 @@
+# bastion:
+#     - name: bastion
+#       hostname: bastion
+#       cpu: 2
+#       mem: 1024
+#       ip: 192.168.122.30
+#       virt_type: kvm
+#       virt_hypervisor: hvm
+#       network: bridge=virbr0
+#       os:
+#           type: linux
+#           variant: rhel7
+#       disks:
+#           os:
+#             size: 50
+#             options: format=qcow2,cache=none,io=native
+#           data:
+#             size: 50
+#             options: format=qcow2,cache=none,io=native
+#       cmd: "yum install -y atomic-openshift-utils,atomic-openshift-clients"
+loadbalancers:
+    - name: haproxylb
+      hostname: haproxylb
+      cpu: 2
+      mem: 1024
+      ip: 192.168.122.40
+      virt_type: kvm
+      virt_hypervisor: hvm
+      network: bridge=virbr0
+      os:
+          type: linux
+          variant: rhel7
+      disks:
+          os:
+            size: 20
+            options: format=qcow2,cache=none,io=native
+          data:
+            size: 50
+            options: format=qcow2,cache=none,io=native
+guests:
+    - name: master01
+      hostname: master01
+      cpu: 2
+      mem: 8096
+      ip: 192.168.122.31
+      virt_type: kvm
+      virt_hypervisor: hvm
+      network: bridge=virbr0
+      os:
+          type: linux
+          variant: rhel7.3
+      disks:
+          os:
+            size: 40
+            options: format=qcow2,cache=none,io=native
+          data:
+            size: 40
+            options: format=qcow2,cache=none,io=native
+          etcd:
+            size: 10
+            options: format=qcow2,cache=none,io=native
+    - name: master02
+      hostname: master02
+      cpu: 2
+      mem: 8096
+      ip: 192.168.122.32
+      virt_type: kvm
+      virt_hypervisor: hvm
+      network: bridge=virbr0
+      os:
+          type: linux
+          variant: rhel7.3
+      disks:
+          os:
+            size: 40
+            options: format=qcow2,cache=none,io=native
+          data:
+            size: 40
+            options: format=qcow2,cache=none,io=native
+          etcd:
+            size: 10
+            options: format=qcow2,cache=none,io=native
+    - name: master03
+      hostname: master03
+      cpu: 2
+      mem: 8096
+      ip: 192.168.122.33
+      virt_type: kvm
+      virt_hypervisor: hvm
+      network: bridge=virbr0
+      os:
+          type: linux
+          variant: rhel7.3
+      disks:
+          os:
+            size: 40
+            options: format=qcow2,cache=none,io=native
+          data:
+            size: 40
+            options: format=qcow2,cache=none,io=native
+          etcd:
+            size: 10
+            options: format=qcow2,cache=none,io=native
+    - name: infranode01
+      hostname: infranode01
+      cpu: 2
+      mem: 8096
+      ip: 192.168.122.34
+      virt_type: kvm
+      virt_hypervisor: hvm
+      network: bridge=virbr0
+      os:
+          type: linux
+          variant: rhel7.3
+      disks:
+          os:
+            size: 40
+            options: format=qcow2,cache=none,io=native
+          data:
+            size: 40
+            options: format=qcow2,cache=none,io=native
+          origin:
+            size: 20
+            options: format=qcow2,cache=none,io=native
+
+    - name: infranode02
+      hostname: infranode02
+      cpu: 2
+      mem: 8096
+      ip: 192.168.122.35
+      virt_type: kvm
+      virt_hypervisor: hvm
+      network: bridge=virbr0
+      os:
+          type: linux
+          variant: rhel7.3
+      disks:
+          os:
+            size: 40
+            options: format=qcow2,cache=none,io=native
+          data:
+            size: 40
+            options: format=qcow2,cache=none,io=native
+          origin:
+            size: 20
+            options: format=qcow2,cache=none,io=native
+    - name: infranode03
+      hostname: infranode03
+      cpu: 2
+      mem: 8096
+      ip: 192.168.122.36
+      virt_type: kvm
+      virt_hypervisor: hvm
+      network: bridge=virbr0
+      os:
+          type: linux
+          variant: rhel7.3
+      disks:
+          os:
+            size: 40
+            options: format=qcow2,cache=none,io=native
+          data:
+            size: 40
+            options: format=qcow2,cache=none,io=native
+          origin:
+            size: 20
+            options: format=qcow2,cache=none,io=native
+
+    - name: node01
+      hostname: node01
+      cpu: 2
+      mem: 8096
+      ip: 192.168.122.37
+      virt_type: kvm
+      virt_hypervisor: hvm
+      network: bridge=virbr0
+      os:
+          type: linux
+          variant: rhel7.3
+      disks:
+          os:
+            size: 40
+            options: format=qcow2,cache=none,io=native
+          data:
+            size: 40
+            options: format=qcow2,cache=none,io=native
+          origin:
+            size: 20
+            options: format=qcow2,cache=none,io=native
+    - name: node02
+      hostname: node02
+      cpu: 2
+      mem: 8096
+      ip: 192.168.122.38
+      virt_type: kvm
+      virt_hypervisor: hvm
+      network: bridge=virbr0
+      os:
+          type: linux
+          variant: rhel7.3
+      disks:
+          os:
+            size: 40
+            options: format=qcow2,cache=none,io=native
+          data:
+            size: 40
+            options: format=qcow2,cache=none,io=native
+          origin:
+            size: 20
+            options: format=qcow2,cache=none,io=native
+    - name: node03
+      hostname: node03
+      cpu: 2
+      mem: 8096
+      ip: 192.168.122.39
+      virt_type: kvm
+      virt_hypervisor: hvm
+      network: bridge=virbr0
+      os:
+          type: linux
+          variant: rhel7.3
+      disks:
+          os:
+            size: 40
+            options: format=qcow2,cache=none,io=native
+          data:
+            size: 40
+            options: format=qcow2,cache=none,io=native
+          origin:
+            size: 20
+            options: format=qcow2,cache=none,io=native
+# ceph:
+#     - name: ceph01
+#       hostname: ceph01
+#       cpu: 2
+#       mem: 1024
+#       ip: 192.168.122.41
+#       virt_type: kvm
+#       virt_hypervisor: hvm
+#       network: bridge=virbr0
+#       os:
+#           type: linux
+#           variant: rhel7
+#       disks:
+#           os:
+#             size: 15
+#             options: format=qcow2,cache=none,io=native
+#           data:
+#             size: 50
+#             options: format=qcow2,cache=none,io=native
+#     - name: ceph02
+#       hostname: ceph02
+#       cpu: 2
+#       mem: 1024
+#       ip: 192.168.122.42
+#       virt_type: kvm
+#       virt_hypervisor: hvm
+#       network: bridge=virbr0
+#       os:
+#           type: linux
+#           variant: rhel7
+#       disks:
+#           os:
+#             size: 15
+#             options: format=qcow2,cache=none,io=native
+#           data:
+#             size: 50
+#             options: format=qcow2,cache=none,io=native
+#     - name: ceph03
+#       hostname: ceph03
+#       cpu: 2
+#       mem: 1024
+#       ip: 192.168.122.43
+#       virt_type: kvm
+#       virt_hypervisor: hvm
+#       network: bridge=virbr0
+#       os:
+#           type: linux
+#           variant: rhel7
+#       disks:
+#           os:
+#             size: 15
+#             options: format=qcow2,cache=none,io=native
+#           data:
+#             size: 50
+#             options: format=qcow2,cache=none,io=native

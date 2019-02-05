@@ -1,0 +1,12 @@
+- name: pause until ssh connection comes back
+  pause:
+    minutes: 1
+- name: Check if cloud-init is done
+  wait_for:
+    timeout: 900
+    path:  /var/log/cloud-init-output.log
+    search_regex: "finished at"
+# - name: Detach cloud-drive
+#   command: >
+#     virsh detach-disk --persistent {{undercloud_hostname}} /var/lib/libvirt/images/{{undercloud_hostname}}-drive.img
+#   delegate_to: ovh

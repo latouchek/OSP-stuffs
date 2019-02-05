@@ -1,0 +1,33 @@
+
+- hosts: reposerver
+  tasks:
+    # - name: Check if cloud-init is done
+    #   wait_for:
+    #     path:  /var/log/cloud-init.log
+    #     search_regex: "finished at"
+    - name: copy cron script
+      template: src=./roles/reposerver/templates/repo-cron.sh dest=/opt/repo-cron.sh owner=root group=root mode=0755
+    - name: create symlink
+      file: dest=/var/www/html/OSP src=/OSPOCP state=link force=yes
+    - name: httpd
+      service: name=httpd enabled=yes state=started
+    - name: disable selinux
+      selinux: state=disabled
+    # - name: populate repos
+    #   script:
+    #     ./roles/reposerver/templates/repo-cron.sh
+    # - name: create cron job to update repo-cron
+    #   cron:
+    #     name: yum autoupdate
+    #     weekday: 0-6
+    #     minute: 0
+    #     hour: 12
+    #     user: root
+    #     job: "/opt/repo-cron.sh"
+    #     cron_file: repo-update
+
+- hosts: hosts
+  tasks:
+    - name: Detach cloud-drive
+      command: >
+        virsh detach-disk --persistent {{reposerver_hostname}} /var/lib/libvirt/images/{{reposerver_hostname}}-drive.iso

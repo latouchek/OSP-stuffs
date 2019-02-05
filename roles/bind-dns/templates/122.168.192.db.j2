@@ -1,0 +1,27 @@
+$TTL 86400
+@ IN SOA {{item.name}}.lab.local. root.lab.local. (
+2017120100 ;Serial
+3600 ;Refresh
+1800 ;Retry
+604800 ;Expire
+43200 ;Minimum TTL
+)
+;Name Server Information
+@ IN NS {{item.name}}.lab.local.
+;Reverse lookup for Name Server
+30 IN PTR {{item.name}}.lab.local.
+;PTR Record IP address to HostName
+4 IN PTR reposerver.lab.local.
+31 IN PTR master01.lab.local.
+32 IN PTR master02.lab.local.
+33 IN PTR master03.lab.local.
+34 IN PTR infranode01.lab.local.
+35 IN PTR infranode02.lab.local.
+36 IN PTR infranode03.lab.local.
+37 IN PTR node01.lab.local.
+38 IN PTR node02.lab.local.
+39 IN PTR node03.lab.local.
+40 IN PTR haproxylb.lab.local.
+41 IN PTR ceph01.lab.local.
+42 IN PTR ceph02.lab.local.
+43 IN PTR ceph03.lab.local.

@@ -1,0 +1,7 @@
+<network>
+  <name>net-internal-traffic</name>
+  <forward mode='nat'>
+  </forward>
+  <ip address='10.0.1.1' netmask='255.255.255.0'>
+  </ip>
+</network>

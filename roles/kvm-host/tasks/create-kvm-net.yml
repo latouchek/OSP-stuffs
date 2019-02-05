@@ -1,0 +1,34 @@
+- hosts: hosts
+  sudo: true
+  tasks:
+  - name: create network
+    virt_net: command=define name={{item}} xml='{{ lookup('file', './files/{{item}}.xml') }}'
+    with_items:
+      # - mgmt-net
+      # - provisioning-net
+      # - tenant-net
+      - net-external
+      - ovs-trunk-network
+  - name: set nets as active
+    virt_net: state=active  name={{item}}
+    with_items:
+      # - mgmt-net
+      # - provisioning-net
+      # - tenant-net
+      - net-external
+  - name: set autostart for all nets
+    virt_net: autostart=yes name={{item}}
+    with_items:
+      # - mgmt-net
+      # - provisioning-net
+      # - tenant-net
+      - net-external
+  - name: start  all nets
+    virt_net: start=yes name={{item}}
+    with_items:
+      # - mgmt-net
+      # - provisioning-net
+      # - tenant-net
+      - net-external
+  # - name: create net
+  #   virt_net: command=define name=provisioning-net xml='{{ lookup('file', './files/provisioning-net.xml') }}' #state=active autostart=yes

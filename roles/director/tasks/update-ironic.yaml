@@ -1,0 +1,8 @@
+- name: modify ironic.conf
+    sudo: true
+    ini_file: dest=/etc/ironic/ironic.conf owner=stack group=wheel mode=755 section={{ item.section }}  option={{ item.option }} value={{ item.value }}
+    with_items:
+      - { section: 'DEFAULT', option: 'enabled_drivers', value: 'pxe_ipmitool,pxe_ssh,pxe_drac,fake_pxe'}
+
+    notify:
+      - restart openstack-ironic-conductor

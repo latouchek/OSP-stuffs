@@ -1,0 +1,10 @@
+<network>
+       <name>public-net</name>
+       <bridge name="virbr0" />
+       <forward mode="nat"/>
+       <ip address="10.1.1.1" netmask="255.255.255.0">
+         <dhcp>
+           <range start="10.1.1.2" end="10.1.1.254" />
+         </dhcp>
+       </ip>
+     </network>

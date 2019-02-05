@@ -1,0 +1,26 @@
+---
+   - name: generate cloud drive for rhel
+     include: generate-cloud-drive-rhel.yml
+     when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
+
+   - name: generate cloud drive for Fedora
+     include: generate-cloud-drive-fed.yml
+     when: ansible_distribution == "Fedora" or ansible_distribution == 'Ubuntu'
+
+   - name: Copy preseeded qcow2 file and use it as a base for undercloud creation
+     copy: remote_src=True src=/var/lib/libvirt/images/{{undercloud_hostname}}-matrix.qcow2 dest=/var/lib/libvirt/images/{{undercloud_hostname}}.qcow2
+
+   - name: define undercloud vm
+     virt:
+         name: '{{undercloud_hostname}}'
+         command: define
+         xml: "{{ lookup('file', '{{ playbook_dir }}/roles/kvm-host/templates/undercloud.xml') }}"
+         uri: 'qemu:///system'
+   - name: start undercloud vm
+     virt:
+         name: '{{undercloud_hostname}}'
+         state: running
+         uri: 'qemu:///system'
+  #  - name: Detach cloud-drive
+  #    command: >
+  #     virsh detach-disk --persistent {{undercloud_hostname}} /var/lib/libvirt/images/{{undercloud_hostname}}-drive.img

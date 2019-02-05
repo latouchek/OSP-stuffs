@@ -1,0 +1,4 @@
+- name: Detach cloud-drive
+  command: >
+   virsh detach-disk --persistent {{undercloud_hostname}} /var/lib/libvirt/images/{{undercloud_hostname}}-drive.img
+  delegate_to: kvm-ovh

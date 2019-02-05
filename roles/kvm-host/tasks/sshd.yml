@@ -1,0 +1,7 @@
+- hosts: hosts
+  tasks:
+   - name: modify sshd_config
+     lineinfile: dest=/etc/ssh/sshd_config regexp='^MACs|'
+                 line='MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,hmac-ripemd160,hmac-md5,hmac-sha1,umac-64@openssh.com,hmac-ripemd160'
+                 backrefs=yes
+                 backup=yes

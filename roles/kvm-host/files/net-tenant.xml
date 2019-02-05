@@ -1,0 +1,4 @@
+<network>
+<name>net-tenant</name>
+<ip address="172.18.0.1" netmask="255.255.255.0"/>
+</network>

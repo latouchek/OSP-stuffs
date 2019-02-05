@@ -1,0 +1,6 @@
+<network>
+<name>provisioning-net</name>
+<forward mode='bridge'/>
+<bridge name='mgmt'/>
+<virtualport type='openvswitch'/>
+</network>

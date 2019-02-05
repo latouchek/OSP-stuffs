@@ -1,0 +1,32 @@
+rhn_username:
+rhn_password:
+pool: 
+undercloud_hostname: rhsec-director
+undercloud_fqdn: rhsec-director
+reposerver_hostname: reposerver2
+reposerver_fqdn: reposerver2.lab.local
+reposerver_ip: 192.168.122.4
+collectd_hostname: collectd
+collectd_fqdn: collectd.lab.local
+collectd_ip: 192.168.122.5
+ansible_host_hostname: ansible_host2
+ansible_host_fqdn: ansible_host2.lab.local
+ansible_host_ip: 192.168.122.5
+IDRSAPUB: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDEzU7Cer0A9BPODCrDfZDYKGUPmVfuEP5TeI7jzXWSxjnTYyv3G69mIr7rt1z4PlmBYJ20K9yqu+DauLBa5E4WN8SzBbavaxLfzRiChhVAUUtrL0KoSEt8kYl15vLBUTSgaRXWGM2uCBODa2xa6MY5GBfDICBaOXXpBDNZ9MEuBclqB0vboOM1KF9DVqYcWaluICLfKNeCMGoChYIS+GUbvcMZNyD8ZUKf2AE77PHBlrazW+H5e+kLQGr6EOkrP1WGRucK0x/IlAFsBtkwdR8k7cdssf+dUH7cLwmuXI11Q2mymQKlXtrsyzbgDVI8KLuapsiD74yBEmTuSYtC9Ait latouche@metal-machine-music"
+local_ip: 192.0.2.2/24
+undercloud_public_vip: 192.0.2.3
+undercloud_admin_vip: 192.0.2.4
+local_interface: eth0
+masquerade_network: 192.0.2.0/24
+dhcp_start: 192.0.2.20
+dhcp_end: 192.0.2.40
+network_cidr: 192.0.2.0/24
+network_gateway: 192.0.2.2
+discovery_iprange: 192.0.2.50,192.0.2.80
+undercloud_debug: true
+enable_ui: true
+ipxe_deploy: true
+clean_nodes: false
+generate_service_certificate: true
+undercloud_admin_password: Passw0rd
+version: 13

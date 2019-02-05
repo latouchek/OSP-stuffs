@@ -1,0 +1,4 @@
+  - name: copy undercloud.conf
+    copy: src=files/undercloud.conf dest=/home/stack/ owner=stack group=stack mode=755
+  - name: copy hieradata-override.yaml
+    copy: src=files/hieradata-override.yaml dest=/home/stack/ owner=stack group=stack mode=755
