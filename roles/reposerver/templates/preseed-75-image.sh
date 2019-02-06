@@ -38,9 +38,9 @@ virt-customize  -a rhel7-guest-official.qcow2 \
           --cpu host-passthrough \
           --name reposerver2
 
-export USER=klatouch-tiger
-export PASSWORD=Nitzerebb70%
-export POOLID=8a85f98760fe2f850160ff3c3adb6474
+export USER=
+export PASSWORD=
+export POOLID=
 export ROOTPASSWORD=toor # choose a root user password
 export STACKPASSWORD=stack # choose a stack user password
 virt-customize  -a rhel7-guest-official.qcow2 \
